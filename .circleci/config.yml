@@ -24,12 +24,12 @@ aliases:
     name: EBS Deploy
     command: |
       cd ${EBS_TOOLS} && \
-        EB_APP=opentutor make clean build \
+        EB_APP=ict-test-opentutor make clean build \
         && cp -r ~/project/nginx build/ebs/bundle/nginx \
         && mkdir -p build/ebs/bundle/classifier \
         && cp -r ~/project/models build/ebs/bundle/classifier/models \
         && cp -r ~/project/shared build/ebs/bundle/classifier/shared \
-        && EB_APP=opentutor make eb-deploy
+        && EB_APP=ict-test-opentutor make eb-deploy
   - &env-init
     name: Init EBS env
     command: eval $EBS_TOOLS_ENV_INIT
