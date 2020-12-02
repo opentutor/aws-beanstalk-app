@@ -1,0 +1,10 @@
+.cache
+.circleci
+.venv
+.vscode
+.elasticbeanstalk
+bin
+ebs
+node_modules
+public
+static

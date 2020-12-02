@@ -1,0 +1,14 @@
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+build
+dist
+node_modules
+docker-compose.override-images.yml
+.DS_Store
+*.secret
+.venv
+.env
+.opentutor*

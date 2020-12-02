@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+  cypress:
+    entrypoint: cypress open --project /test
+    environment:
+      - QT_X11_NO_MITSHM=1
+      - _X11_NO_MITSHM=1
+      - _MITSHM=0
+      - DISPLAY=host.docker.internal:0
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix

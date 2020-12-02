@@ -1,0 +1,30 @@
+{
+  "name": "org-pal3-opentutor",
+  "version": "1.0.0",
+  "description": "Deployment of opentutor for pal3, e.g. opentutor.org",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write '**/*.{js,jsx,json,ts,tsx}'",
+    "cypress:stop": "docker-compose -f docker-compose.yml -f docker-compose-e2e.yml down --remove-orphans",
+    "cypress:start": "NODE_ENV=pal3-opentutor-dev && ENV=pal3-opentutor-dev && LOG_LEVEL_DIALOG=info && docker-compose -f docker-compose.yml -f docker-compose-e2e.yml up",
+    "cypress:test": "cd test && npm run test:cypress",
+    "cypress:open": "cd test && npm run cy:open",
+    "license:fix": "license-check-and-add remove -f license-config.json && license-check-and-add add -f license-config.json",
+    "test:license": "license-check-and-add check -f license-config.json",
+    "test:format": "prettier --check '**/*.{js,jsx,json,ts,tsx}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ICTLearningSciences/org-pal3-opentutor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ICTLearningSciences/org-pal3-opentutor/issues"
+  },
+  "homepage": "https://github.com/ICTLearningSciences/org-pal3-opentutor#readme",
+  "devDependencies": {
+    "license-check-and-add": "^3.0.4",
+    "prettier": "^2.0.5"
+  }
+}

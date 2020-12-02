@@ -1,0 +1,212 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "classifier-models",
+      "host": {
+        "sourcePath": "/var/app/current/classifier/models"
+      }
+    },
+    {
+      "name": "classifier-shared",
+      "host": {
+        "sourcePath": "/var/app/current/classifier/shared"
+      }
+    },
+    {
+      "name": "dialog-volume-env",
+      "host": {
+        "sourcePath": "/var/app/current/dialog/.env"
+      }
+    },
+    {
+      "name": "nginx-volume-www",
+      "host": {
+        "sourcePath": "/var/app/current/nginx/www"
+      }
+    },
+    {
+      "name": "nginx-volume-nginx-conf",
+      "host": {
+        "sourcePath": "/var/app/current/nginx/nginx.conf"
+      }
+    },
+    {
+      "name": "nginx-volume-default-conf",
+      "host": {
+        "sourcePath": "/var/app/current/nginx/conf.d"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "admin",
+      "image": "uscictdocker/opentutor-admin:0.1.0-alpha.52",
+      "essential": true,
+      "memory": 1024,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-admin",
+          "containerPath": "/var/log/node"
+        }
+      ],
+      "environment": [
+        {
+          "name": "GRAPHQL_ENDPOINT",
+          "value": "http://graphql:3001/graphql"
+        }
+      ],
+      "links": ["graphql"]
+    },
+    {
+      "name": "classifier",
+      "image": "uscictdocker/opentutor-classifier-api:1.2.0",
+      "environment": [
+        {
+          "name": "STATUS_URL_FORCE_HTTPS",
+          "value": "true"
+        }
+      ],
+      "essential": true,
+      "links": ["graphql", "redis"],
+      "memory": 8192,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-classifier",
+          "containerPath": "/var/log/flask"
+        },
+        {
+          "sourceVolume": "classifier-models",
+          "containerPath": "/app/models",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "classifier-shared",
+          "containerPath": "/app/shared",
+          "readOnly": true
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "image": "uscictdocker/opentutor-dialog:1.0.0-alpha.1",
+      "essential": true,
+      "memory": 1024,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-dialog",
+          "containerPath": "/var/log/node"
+        }
+      ],
+      "environment": [
+        {
+          "name": "CLASSIFIER_ENDPOINT",
+          "value": "http://classifier:5000/classifier/evaluate/"
+        },
+        {
+          "name": "GRAPHQL_ENDPOINT",
+          "value": "http://graphql:3001/graphql"
+        }
+      ],
+      "links": ["classifier", "graphql"]
+    },
+    {
+      "name": "graphql",
+      "image": "uscictdocker/opentutor-graphql:1.0.0-alpha.40",
+      "essential": true,
+      "memory": 1024,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-graphql",
+          "containerPath": "/var/log/node"
+        }
+      ]
+    },
+    {
+      "name": "nginx",
+      "image": "nginx:1-alpine",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["classifier", "dialog", "admin", "graphql", "tutor"],
+      "mountPoints": [
+        {
+          "sourceVolume": "nginx-volume-www",
+          "containerPath": "/etc/nginx/html",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "nginx-volume-nginx-conf",
+          "containerPath": "/etc/nginx/nginx.conf",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "nginx-volume-default-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "awseb-logs-nginx",
+          "containerPath": "/var/log/nginx"
+        }
+      ]
+    },
+    {
+      "name": "redis",
+      "image": "redis:6-alpine",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 6379,
+          "containerPort": 6379
+        }
+      ]
+    },
+    {
+      "name": "training",
+      "image": "uscictdocker/opentutor-classifier:1.2.0",
+      "entryPoint": ["/app/training_worker.sh"],
+      "environment": [
+        {
+          "name": "GRAPHQL_ENDPOINT",
+          "value": "http://graphql:3001/graphql"
+        }
+      ],
+      "essential": true,
+      "links": ["graphql", "redis"],
+      "memory": 2048,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-training",
+          "containerPath": "/var/log/training"
+        },
+        {
+          "sourceVolume": "classifier-models",
+          "containerPath": "/app/models"
+        },
+        {
+          "sourceVolume": "classifier-shared",
+          "containerPath": "/app/shared"
+        }
+      ]
+    },
+    {
+      "name": "tutor",
+      "image": "uscictdocker/opentutor-web-client:1.1.0-alpha.18",
+      "essential": true,
+      "memory": 1024,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-tutor",
+          "containerPath": "/var/log/node"
+        }
+      ]
+    }
+  ]
+}

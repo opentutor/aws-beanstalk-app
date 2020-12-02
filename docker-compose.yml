@@ -1,0 +1,102 @@
+version: '3.2'
+services:
+  admin:
+    image: uscictdocker/opentutor-admin:0.1.0-alpha.52
+    environment:
+      - NODE_ENV
+      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
+    depends_on:
+      - graphql
+  classifier:
+    image: uscictdocker/opentutor-classifier-api:1.2.0
+    depends_on:
+      - redis
+    links:
+      - redis
+    ports:
+      - 5000:5000
+    environment:
+      - MODEL_ROOT
+      - SHARED_ROOT
+      - STATUS_URL_FORCE_HTTPS
+    volumes:
+      - type: bind
+        # source: ./.opentutor-docker/models
+        source: ./models
+        target: /app/models
+      - type: bind
+        source: ./shared
+        target: /app/shared
+  dialog:
+    image: uscictdocker/opentutor-dialog:1.0.0-alpha.1
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV
+      - CLASSIFIER_ENDPOINT=http://classifier:5000/classifier/evaluate/
+      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
+      - LOG_LEVEL_DIALOG
+    depends_on:
+      - classifier
+      - graphql
+    links:
+      - classifier
+      - graphql
+  graphql:
+    image: uscictdocker/opentutor-graphql:1.0.0-alpha.40
+    ports:
+      - 3001:3001
+    environment:
+      - NODE_ENV
+      - MONGO_URI
+    volumes:
+      - type: bind
+        source: ./build/publish/.env
+        target: /app/.env
+  nginx:
+    image: nginx:1-alpine
+    ports:
+      - 80:80
+    depends_on:
+      - classifier
+      - dialog
+      - graphql
+      - admin
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./nginx/conf.d
+        target: /etc/nginx/conf.d
+  redis:
+    image: "redis:6-alpine"
+    ports: 
+      - "6379:6379"
+  training:
+    image: uscictdocker/opentutor-classifier:1.2.0
+    depends_on:
+      - graphql
+      - redis
+    entrypoint: /app/training_worker.sh
+    environment:
+      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
+      - LOG_LEVEL_CLASSIFIER=DEBUG
+      - MODEL_ROOT
+      - SHARED_ROOT
+    links:
+      - graphql
+      - redis
+    volumes:
+      - type: bind
+        source: ./.opentutor-docker/archive
+        target: /app/archive
+      - type: bind
+        source: ./.opentutor-docker/models
+        target: /app/models
+      - type: bind
+        source: ./shared
+        target: /app/shared
+  tutor:
+    image: uscictdocker/opentutor-web-client:1.1.0-alpha.18
+  
