@@ -35,34 +35,6 @@ The app is set up to run locally in `docker-compose`, but it's easer to start it
 make run
 ```
 
-## Training the classifier model
-
-In `Makefile`, ensure CLASSIFIER_DOCKER_IMAGE is up-to-date
-
-#### Syncing training data
-
-Downloads training config.yaml and training.csv into /data/lessonId
-
-```
-make sync-{lessonId}
-```
-
-#### Training model classifier
-
-Creates a model for the lesson under /models/lessonId
-
-To work, training data must have at least 2 GOOD and 2 BAD responses for each expectation
-
-```
-make train-{lessonId}
-```
-
-#### Training default classifier
-
-```
-make traindefault
-```
-
 ## Cypress End-to-End Testing
 
 #### To run Cypress tests:
