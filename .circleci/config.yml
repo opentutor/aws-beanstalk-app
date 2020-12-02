@@ -15,28 +15,11 @@ aliases:
     name: Install build tools
     command: sudo apt-get update && sudo apt-get install rsync
   - &configure-as-dev
-    name: Configure env for opentutor-dev
+    name: Configure env for opentutor-dev-beanstalk
     command: |
-      echo 'export EB_ENV=opentutor-dev' >> $BASH_ENV \
-      && echo 'export ENV=opentutor-dev' >> $BASH_ENV \
-      && echo 'export NODE_ENV=opentutor-dev' >> $BASH_ENV
-  - &configure-as-qa
-    name: Configure env for opentutor-qa
-    command: |
-      echo 'export EB_ENV=opentutor-qa' >> $BASH_ENV \
-      && echo 'export ENV=opentutor-qa' >> $BASH_ENV \
-      && echo 'export NODE_ENV=opentutor-qa' >> $BASH_ENV
-  - &configure-as-production
-    name: Configure env for production
-    command: |
-      echo 'export ENV=production' >> $BASH_ENV \
-      && echo 'export NODE_ENV=production' >> $BASH_ENV
-  - &configure-as-green
-    name: Configure env for opentutor-green
-    command: echo 'export EB_ENV=opentutor-green' >> $BASH_ENV
-  - &configure-as-blue
-    name: Configure env for opentutor-blue
-    command: echo 'export EB_ENV=opentutor-blue' >> $BASH_ENV
+      echo 'export EB_ENV=opentutor-dev-beanstalk' >> $BASH_ENV \
+      && echo 'export ENV=opentutor-dev-beanstalk' >> $BASH_ENV \
+      && echo 'export NODE_ENV=opentutor-dev-beanstalk' >> $BASH_ENV
   - &eb-deploy
     name: EBS Deploy
     command: |
