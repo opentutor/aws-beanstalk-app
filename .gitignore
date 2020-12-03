@@ -12,3 +12,4 @@ docker-compose.override-images.yml
 .venv
 .env
 .opentutor*
+.vscode/
