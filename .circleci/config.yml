@@ -110,15 +110,15 @@ workflows:
   version: 2
   test-and-deploy-dev:  # deploy code/content to dev waits for approval
     jobs:
-      - test-format
-      - test-license
-      - test-cypress
+      # - test-format
+      # - test-license
+      # - test-cypress
       - approve-to-dev:
           type: approval
-          requires:
-            - test-format
-            - test-license
-            - test-cypress
+          # requires:
+          #   - test-format
+          #   - test-license
+          #   - test-cypress
       - ebs-deploy-dev:
           requires:
             - approve-to-dev

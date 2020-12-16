@@ -98,5 +98,5 @@ services:
         source: ./shared
         target: /app/shared
   tutor:
-    image: uscictdocker/opentutor-web-client:1.2.2
+    image: uscictdocker/opentutor-web-client:1.2.3
   
