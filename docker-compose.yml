@@ -1,14 +1,14 @@
 version: '3.2'
 services:
   admin:
-    image: uscictdocker/opentutor-admin:0.3.1-alpha.7
+    image: uscictdocker/opentutor-admin:0.1.0-alpha.52
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:1.3.0-alpha.15
+    image: uscictdocker/opentutor-classifier-api:1.2.0
     depends_on:
       - redis
     links:
@@ -28,7 +28,7 @@ services:
         source: ./shared
         target: /app/shared
   dialog:
-    image: uscictdocker/opentutor-dialog:1.2.0-alpha.2
+    image: uscictdocker/opentutor-dialog:1.1.1
     ports:
       - 3000:3000
     environment:
@@ -43,24 +43,12 @@ services:
       - classifier
       - graphql
   graphql:
-    image: uscictdocker/opentutor-graphql:1.3.0-alpha.8
+    image: uscictdocker/opentutor-graphql:1.0.0-alpha.40
     ports:
       - 3001:3001
     environment:
       - NODE_ENV
       - MONGO_URI
-    volumes:
-      - type: bind
-        source: ./build/publish/.env
-        target: /app/.env
-  home:
-    image: uscictdocker/opentutor-home:0.2.0-alpha.5
-    environment:
-      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
-    depends_on:
-      - graphql
-      - admin
-      - tutor
     volumes:
       - type: bind
         source: ./build/publish/.env
@@ -74,7 +62,6 @@ services:
       - dialog
       - graphql
       - admin
-      - home
     volumes:
       - type: bind
         source: ./nginx/nginx.conf
@@ -111,4 +98,5 @@ services:
         source: ./shared
         target: /app/shared
   tutor:
-    image: uscictdocker/opentutor-web-client:1.2.1-alpha.2
+    image: uscictdocker/opentutor-web-client:1.2.2
+  

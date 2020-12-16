@@ -41,9 +41,9 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:0.3.1-alpha.7",
+      "image": "uscictdocker/opentutor-admin:0.1.0-alpha.52",
       "essential": true,
-      "memory": 512,
+      "memory": 1024,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-admin",
@@ -59,27 +59,8 @@
       "links": ["graphql"]
     },
     {
-      "name": "home",
-      "image": "uscictdocker/opentutor-home:0.2.0-alpha.5",
-      "essential": true,
-      "memory": 512,
-      "mountPoints": [
-        {
-          "sourceVolume": "awseb-logs-home",
-          "containerPath": "/var/log/node"
-        }
-      ],
-      "environment": [
-        {
-          "name": "GRAPHQL_ENDPOINT",
-          "value": "http://graphql:3001/graphql"
-        }
-      ],
-      "links": ["graphql", "admin", "tutor"]
-    },
-    {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:1.3.0-alpha.15",
+      "image": "uscictdocker/opentutor-classifier-api:1.2.0",
       "environment": [
         {
           "name": "STATUS_URL_FORCE_HTTPS",
@@ -108,9 +89,9 @@
     },
     {
       "name": "dialog",
-      "image": "uscictdocker/opentutor-dialog:1.2.0-alpha.2",
+      "image": "uscictdocker/opentutor-dialog:1.1.1",
       "essential": true,
-      "memory": 512,
+      "memory": 1024,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-dialog",
@@ -131,9 +112,9 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:1.3.0-alpha.8",
+      "image": "uscictdocker/opentutor-graphql:1.0.0-alpha.40",
       "essential": true,
-      "memory": 512,
+      "memory": 1024,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-graphql",
@@ -152,7 +133,7 @@
           "containerPort": 80
         }
       ],
-      "links": ["classifier", "dialog", "admin", "graphql", "tutor", "home"],
+      "links": ["classifier", "dialog", "admin", "graphql", "tutor"],
       "mountPoints": [
         {
           "sourceVolume": "nginx-volume-www",
@@ -217,9 +198,9 @@
     },
     {
       "name": "tutor",
-      "image": "uscictdocker/opentutor-web-client:1.2.1-alpha.2",
+      "image": "uscictdocker/opentutor-web-client:1.2.2",
       "essential": true,
-      "memory": 512,
+      "memory": 1024,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-tutor",
