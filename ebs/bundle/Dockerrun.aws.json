@@ -2,9 +2,21 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "classifier-models",
+      "name": "classifier-archive-efs",
       "host": {
-        "sourcePath": "/var/app/current/classifier/models"
+        "sourcePath": "/efs/archive"
+      }
+    },
+    {
+      "name": "classifier-models-efs",
+      "host": {
+        "sourcePath": "/efs/models"
+      }
+    },
+    {
+      "name": "classifier-models-default",
+      "host": {
+        "sourcePath": "/var/app/current/classifier/models/default"
       }
     },
     {
@@ -76,8 +88,13 @@
           "containerPath": "/var/log/flask"
         },
         {
-          "sourceVolume": "classifier-models",
+          "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "classifier-models-default",
+          "containerPath": "/app/models/default",
           "readOnly": true
         },
         {
@@ -186,9 +203,18 @@
           "sourceVolume": "awseb-logs-training",
           "containerPath": "/var/log/training"
         },
+
         {
-          "sourceVolume": "classifier-models",
+          "sourceVolume": "classifier-archive-efs",
+          "containerPath": "/app/archive"
+        },
+        {
+          "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models"
+        },
+        {
+          "sourceVolume": "classifier-models-default",
+          "containerPath": "/app/models/default"
         },
         {
           "sourceVolume": "classifier-shared",
