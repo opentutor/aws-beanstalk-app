@@ -1,5 +1,6 @@
 SHELL:=/bin/bash
 ENV?=test
+AWS_REGION?=us-east-1
 NODE_ENV?=$(ENV)
 LOG_LEVEL_DIALOG?=info
 CLASSIFIER_DOCKER_IMAGE?=uscictdocker/opentutor-classifier:1.1.0-alpha.6
@@ -30,9 +31,13 @@ $(VENV)-update:
 	$(VENV)/bin/pip install --upgrade pip
 	$(VENV)/bin/pip install -r requirements.txt
 
-eb-ssh-%: $(VENV)
+eb-ssh-%: 
+	ENV=$* $(MAKE) eb-ssh
+
+eb-ssh: $(VENV)
 	. $(VENV)/bin/activate \
-		&& eb use $* --region us-east-1 && eb ssh
+		&& eb use $(ENV) --region $(AWS_REGION) && eb ssh
+
 
 .PHONY: clean
 clean:

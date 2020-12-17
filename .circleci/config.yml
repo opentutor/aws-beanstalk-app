@@ -17,7 +17,7 @@ aliases:
   - &configure-as-dev
     name: Configure env for ict-test-opentutor
     command: |
-      echo 'export EB_ENV=ict-test-opentutor' >> $BASH_ENV \
+      echo 'export EB_ENV=test1' >> $BASH_ENV \
       && echo 'export ENV=ict-test-opentutor' >> $BASH_ENV \
       && echo 'export NODE_ENV=ict-test-opentutor' >> $BASH_ENV
   - &eb-deploy
