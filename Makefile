@@ -1,5 +1,5 @@
 SHELL:=/bin/bash
-ENV?=pal3-opentutor-dev
+ENV?=test
 NODE_ENV?=$(ENV)
 LOG_LEVEL_DIALOG?=info
 CLASSIFIER_DOCKER_IMAGE?=uscictdocker/opentutor-classifier:1.1.0-alpha.6
@@ -54,14 +54,14 @@ build/publish:
 
 build: build/publish
 
-.opentutor-docker/archive:
-	mkdir -p .opentutor-docker/archive
+archive:
+	mkdir -p archive
 
-.opentutor-docker/models:
-	mkdir -p .opentutor-docker/models
+models:
+	mkdir -p models
 
 .PHONY: run
-run: clean build/publish/.env .opentutor-docker/archive .opentutor-docker/models
+run: clean build/publish/.env archive models
 	NODE_ENV=$(ENV) \
 	ENV=$(ENV) \
 	LOG_LEVEL_DIALOG=$(LOG_LEVEL_DIALOG) \

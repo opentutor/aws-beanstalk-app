@@ -8,7 +8,7 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:1.2.0
+    image: uscictdocker/opentutor-classifier-api:1.2.1
     depends_on:
       - redis
     links:
@@ -28,7 +28,7 @@ services:
         source: ./shared
         target: /app/shared
   dialog:
-    image: uscictdocker/opentutor-dialog:1.1.1
+    image: uscictdocker/opentutor-dialog:1.1.2
     ports:
       - 3000:3000
     environment:
@@ -74,7 +74,7 @@ services:
     ports: 
       - "6379:6379"
   training:
-    image: uscictdocker/opentutor-classifier:1.2.0
+    image: uscictdocker/opentutor-classifier:1.2.1
     depends_on:
       - graphql
       - redis
@@ -89,10 +89,10 @@ services:
       - redis
     volumes:
       - type: bind
-        source: ./.opentutor-docker/archive
+        source: ./archive
         target: /app/archive
       - type: bind
-        source: ./.opentutor-docker/models
+        source: ./models
         target: /app/models
       - type: bind
         source: ./shared
