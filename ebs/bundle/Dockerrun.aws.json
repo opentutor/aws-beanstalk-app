@@ -14,12 +14,6 @@
       }
     },
     {
-      "name": "classifier-models-default",
-      "host": {
-        "sourcePath": "/var/app/current/classifier/models/default"
-      }
-    },
-    {
       "name": "classifier-shared",
       "host": {
         "sourcePath": "/var/app/current/classifier/shared"
@@ -90,11 +84,6 @@
         {
           "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models",
-          "readOnly": true
-        },
-        {
-          "sourceVolume": "classifier-models-default",
-          "containerPath": "/app/models/default",
           "readOnly": true
         },
         {
@@ -203,7 +192,6 @@
           "sourceVolume": "awseb-logs-training",
           "containerPath": "/var/log/training"
         },
-
         {
           "sourceVolume": "classifier-archive-efs",
           "containerPath": "/app/archive"
@@ -211,10 +199,6 @@
         {
           "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models"
-        },
-        {
-          "sourceVolume": "classifier-models-default",
-          "containerPath": "/app/models/default"
         },
         {
           "sourceVolume": "classifier-shared",
