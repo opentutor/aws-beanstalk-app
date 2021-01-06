@@ -225,7 +225,7 @@
     },
     {
       "name": "tutor",
-      "image": "uscictdocker/opentutor-web-client:1.2.3",
+      "image": "uscictdocker/opentutor-web-client:1.2.4",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
