@@ -1,15 +1,7 @@
-SHELL:=/bin/bash
 ENV?=test
-AWS_REGION?=us-east-1
+EFS_FILE_SYSTEM_ID?=
 NODE_ENV?=$(ENV)
 LOG_LEVEL_DIALOG?=info
-CLASSIFIER_DOCKER_IMAGE?=uscictdocker/opentutor-classifier:1.1.0-alpha.6
-GRAPHQL_API?=https://dev.opentutor.org/graphql
-
-define NEWLINE
-
-
-endef
 
 DOTENV=env/$(ENV)/.env
 $(DOTENV):
@@ -21,43 +13,53 @@ $(DOTENV):
 	@echo
 	@exit 1
 
-VENV=.venv
-$(VENV):
-	$(MAKE) $(VENV)-update
-
-.PHONY: $(VENV)-update
-$(VENV)-update:
-	[ -d $(VENV) ] || virtualenv -p python3 $(VENV)
-	$(VENV)/bin/pip install --upgrade pip
-	$(VENV)/bin/pip install -r requirements.txt
-
-eb-ssh-%: 
-	ENV=$* $(MAKE) eb-ssh
-
-eb-ssh: $(VENV)
-	. $(VENV)/bin/activate \
-		&& eb use $(ENV) --region $(AWS_REGION) && eb ssh
-
-
 .PHONY: clean
 clean:
-	@rm -rf build
+	@rm -rf build deploy.zip
 
-build/publish/node_modules: build/publish
-	cd build/publish && \
+build/run/node_modules: build/run
+	cd build/run && \
 		npm ci
 
-build/publish/.env: $(DOTENV)
-	mkdir -p build/publish
-	cp $(DOTENV) build/publish/.env
+build/run/.env: $(DOTENV)
+	mkdir -p build/run
+	cp $(DOTENV) build/run/.env
 
-build/publish:
-	mkdir -p build/publish
+build/run:
+	mkdir -p build/run
 	rsync -rv \
 			--exclude node_modules \
-		publish/ build/publish/
+		publish/ build/run/
 
-build: build/publish
+build/deploy:
+	# put everything we want in our beanstalk deploy.zip file
+	# into a build/deploy folder.
+	@if [ -z "$(EFS_FILE_SYSTEM_ID)" ] ; then \
+		echo "required env var EFS_FILE_SYSTEM_ID unset.";\
+		echo "See https://github.com/opentutor/terraform-opentutor-aws-beanstalk/blob/main/template/README.md"; \
+		false ; \
+	fi
+	mkdir -p build/deploy
+	cp -r ebs/bundle build/deploy/bundle
+	# Must set the env-specific EFS_FILE_SYSTEM_ID in an .ebextensions config file
+	# to have our beanstalk-env instances mount this network file system
+	# (used for reading/writing trained models)
+	#
+	# sed -i option works differently on linux and mac
+	# so have to output to a temp file and then copy back
+	cd build/deploy/bundle/.ebextensions \
+		&& sed 's/VAR_EFS_FILE_SYSTEM_ID/$(EFS_FILE_SYSTEM_ID)/g' efs.config > efs.config.tmp \
+		&& mv efs.config.tmp efs.config
+	cp -r ./nginx build/deploy/bundle/nginx
+	mkdir -p build/deploy/bundle/classifier
+	# for now at least, packaging up our default model
+	# and word2vec.bin directly into the deploy.zip for beanstalk
+	cp -r ./models_deployed build/deploy/bundle/classifier/models_deployed
+	cp -r ./shared build/deploy/bundle/classifier/shared
+
+deploy.zip:
+	$(MAKE) clean build/deploy
+	cd build/deploy/bundle && zip -r $(PWD)/deploy.zip .
 
 archive:
 	mkdir -p archive
@@ -66,7 +68,7 @@ models:
 	mkdir -p models
 
 .PHONY: run
-run: clean build/publish/.env archive models
+run: clean build/run/.env archive models
 	NODE_ENV=$(ENV) \
 	ENV=$(ENV) \
 	LOG_LEVEL_DIALOG=$(LOG_LEVEL_DIALOG) \
@@ -75,35 +77,6 @@ run: clean build/publish/.env archive models
 .PHONY: stop
 stop: 
 	docker-compose down --remove-orphans
-
-
-.PHONY: sync-%
-sync-%:
-	docker run \
-		-it \
-		--rm \
-		-v $(PWD)/data:/data \
-	$(CLASSIFIER_DOCKER_IMAGE) sync --lesson $* --url $(GRAPHQL_API) --output /data
-
-.PHONY: traindefault
-traindefault:
-	docker run \
-		-it \
-		--rm \
-		-v $(PWD)/data:/data \
-		-v $(PWD)/shared:/shared \
-		-v $(PWD)/models/default:/output \
-	$(CLASSIFIER_DOCKER_IMAGE) traindefault --data /data/ --output /output --shared /shared
-
-.PHONY: train-%
-train-%:
-	docker run \
-		-it \
-		--rm \
-		-v $(PWD)/data:/data \
-		-v $(PWD)/shared:/shared \
-		-v $(PWD)/models/$*:/output \
-	$(CLASSIFIER_DOCKER_IMAGE) train --data /data/$* --output /output --shared /shared
 
 LICENSE:
 	@echo "you must have a LICENSE file" 1>&2
