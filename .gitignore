@@ -14,5 +14,4 @@ docker-compose.override-images.yml
 .opentutor*
 models
 archive
-!models/default
 

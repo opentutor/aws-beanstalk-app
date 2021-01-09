@@ -2,15 +2,27 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "classifier-models",
+      "name": "classifier-archive-efs",
       "host": {
-        "sourcePath": "/var/app/current/classifier/models"
+        "sourcePath": "/efs/archive"
+      }
+    },
+    {
+      "name": "classifier-models-efs",
+      "host": {
+        "sourcePath": "/efs/models"
       }
     },
     {
       "name": "classifier-shared",
       "host": {
         "sourcePath": "/var/app/current/classifier/shared"
+      }
+    },
+    {
+      "name": "classifier-models-deployed",
+      "host": {
+        "sourcePath": "/var/app/current/classifier/models_deployed"
       }
     },
     {
@@ -60,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:1.2.1",
+      "image": "uscictdocker/opentutor-classifier-api:1.3.0-alpha.17",
       "environment": [
         {
           "name": "STATUS_URL_FORCE_HTTPS",
@@ -76,13 +88,18 @@
           "containerPath": "/var/log/flask"
         },
         {
-          "sourceVolume": "classifier-models",
+          "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models",
           "readOnly": true
         },
         {
           "sourceVolume": "classifier-shared",
           "containerPath": "/app/shared",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "classifier-models-deployed",
+          "containerPath": "/app/models_deployed",
           "readOnly": true
         }
       ]
@@ -170,7 +187,7 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:1.2.1",
+      "image": "uscictdocker/opentutor-classifier:1.3.0-alpha.17",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {
@@ -187,18 +204,28 @@
           "containerPath": "/var/log/training"
         },
         {
-          "sourceVolume": "classifier-models",
+          "sourceVolume": "classifier-archive-efs",
+          "containerPath": "/app/archive"
+        },
+        {
+          "sourceVolume": "classifier-models-efs",
           "containerPath": "/app/models"
         },
         {
           "sourceVolume": "classifier-shared",
-          "containerPath": "/app/shared"
+          "containerPath": "/app/shared",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "classifier-models-deployed",
+          "containerPath": "/app/models_deployed",
+          "readOnly": true
         }
       ]
     },
     {
       "name": "tutor",
-      "image": "uscictdocker/opentutor-web-client:1.2.3",
+      "image": "uscictdocker/opentutor-web-client:1.2.4",
       "essential": true,
       "memory": 1024,
       "mountPoints": [

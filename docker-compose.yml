@@ -8,7 +8,7 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:1.2.1
+    image: uscictdocker/opentutor-classifier-api:1.3.0-alpha.17
     depends_on:
       - redis
     links:
@@ -17,16 +17,22 @@ services:
       - 5000:5000
     environment:
       - MODEL_ROOT
+      - MODEL_DEPLOYED_ROOT
       - SHARED_ROOT
       - STATUS_URL_FORCE_HTTPS
     volumes:
       - type: bind
-        # source: ./.opentutor-docker/models
         source: ./models
         target: /app/models
+        read_only: true
       - type: bind
         source: ./shared
         target: /app/shared
+        read_only: true
+      - type: bind
+        source: ./models_deployed
+        target: /app/models_deployed
+        read_only: true
   dialog:
     image: uscictdocker/opentutor-dialog:1.1.2
     ports:
@@ -74,7 +80,7 @@ services:
     ports: 
       - "6379:6379"
   training:
-    image: uscictdocker/opentutor-classifier:1.2.1
+    image: uscictdocker/opentutor-classifier:1.3.0-alpha.17
     depends_on:
       - graphql
       - redis
@@ -83,6 +89,7 @@ services:
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
       - LOG_LEVEL_CLASSIFIER=DEBUG
       - MODEL_ROOT
+      - MODEL_DEPLOYED_ROOT
       - SHARED_ROOT
     links:
       - graphql
@@ -95,8 +102,13 @@ services:
         source: ./models
         target: /app/models
       - type: bind
+        source: ./models_deployed
+        target: /app/models_deployed
+        read_only: true
+      - type: bind
         source: ./shared
         target: /app/shared
+        read_only: true
   tutor:
-    image: uscictdocker/opentutor-web-client:1.2.3
+    image: uscictdocker/opentutor-web-client:1.2.4
   

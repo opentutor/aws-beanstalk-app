@@ -27,7 +27,7 @@ aliases:
         EB_APP=ict-test-opentutor make clean build \
         && cp -r ~/project/nginx build/ebs/bundle/nginx \
         && mkdir -p build/ebs/bundle/classifier \
-        && cp -r ~/project/models build/ebs/bundle/classifier/models \
+        && cp -r ~/project/models_deployed build/ebs/bundle/classifier/models_deployed \
         && cp -r ~/project/shared build/ebs/bundle/classifier/shared \
         && EB_APP=ict-test-opentutor make eb-deploy
   - &env-init
