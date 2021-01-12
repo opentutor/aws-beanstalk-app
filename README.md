@@ -1,6 +1,6 @@
-# org-opentutor
+# beanstalk-deployment
 
-Demo deployment of opentutor, e.g. opentutor.org
+Demo deployment of opentutor, e.g. opentutor.info
 
 ## Required software
 
