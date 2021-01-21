@@ -9,6 +9,7 @@ node_modules
 docker-compose.override-images.yml
 .DS_Store
 *.secret
+*.zip
 .venv
 .env
 .opentutor*

@@ -57,7 +57,7 @@ services:
       - MONGO_URI
     volumes:
       - type: bind
-        source: ./build/publish/.env
+        source: ./build/run/.env
         target: /app/.env
   nginx:
     image: nginx:1-alpine

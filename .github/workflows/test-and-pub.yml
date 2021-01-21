@@ -1,0 +1,64 @@
+# NOTE: 
+# several of the github secrets used in deployment here
+# (e.g. EFS_FILE_SYSTEM_ID, EBS_APP_NAME, etc.)
+# aren't really secrets, but secrets seems to be the only mechanism 
+# for setting env vars on a github repo,
+# and the priority here is to make this repo fully reusable across 
+name: test and publish
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.15"
+      - name: Test format
+        run: make test-format
+      - name: Test license
+        run: make test-license
+  publish-check:
+    name: publish check
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    outputs:
+      is_release: ${{ steps.is_release.outputs.is_release }}
+    steps:
+      - id: is_release
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.]*)?$ ]]; then
+              echo ::set-output name=is_release::true
+          fi
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - publish-check
+    if: needs.publish-check.outputs.is_release
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        lfs: true
+    - name: Create deploy.zip
+      run: EFS_FILE_SYSTEM_ID=${{secrets.EFS_FILE_SYSTEM_ID}} make deploy.zip
+    - name: Log zip contents
+      run: unzip -l deploy.zip
+    - name: Extract tag as version
+      shell: bash
+      # bash parameter expansion won't work below where we need the release tag
+      # so extract it to an output first here
+      run: echo "##[set-output name=version;]$(echo ${GITHUB_REF#refs/tags/})"
+      id: extract_tag_as_version
+    - name: Beanstalk deploy release
+      uses: einaregilsson/beanstalk-deploy@v14
+      with:
+        aws_access_key: ${{secrets.AWS_ACCESS_KEY_ID}}
+        aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        region: ${{secrets.AWS_REGION}}
+        application_name: ${{secrets.EBS_APP_NAME}}
+        environment_name: ${{secrets.EBS_ENV_NAME_PROD}}
+        version_label: "${{secrets.EBS_APP_NAME}}-${{steps.extract_tag_as_version.outputs.version}}"
+        deployment_package: deploy.zip
+    - name: Deployed!
+      run: echo "🚀 App deployed to beanstalk 🚀"
