@@ -1,3 +1,9 @@
+# NOTE: 
+# several of the github secrets used in deployment here
+# (e.g. EFS_FILE_SYSTEM_ID, EBS_APP_NAME, etc.)
+# aren't really secrets, but secrets seems to be the only mechanism 
+# for setting env vars on a github repo,
+# and the priority here is to make this repo fully reusable across 
 name: test and publish
 on: push
 jobs:
@@ -36,7 +42,7 @@ jobs:
         lfs: true
     - name: Create deploy.zip
       run: EFS_FILE_SYSTEM_ID=${{secrets.EFS_FILE_SYSTEM_ID}} make deploy.zip
-    - name: Debug zip contents
+    - name: Log zip contents
       run: unzip -l deploy.zip
     - name: Extract tag as version
       shell: bash
@@ -52,7 +58,7 @@ jobs:
         region: ${{secrets.AWS_REGION}}
         application_name: ${{secrets.EBS_APP_NAME}}
         environment_name: ${{secrets.EBS_ENV_NAME_PROD}}
-        version_label: ${{steps.extract_tag_as_version.outputs.version}}
+        version_label: "${{secrets.EBS_APP_NAME}}-${{steps.extract_tag_as_version.outputs.version}}"
         deployment_package: deploy.zip
     - name: Deployed!
       run: echo "🚀 App deployed to beanstalk 🚀"

@@ -44,7 +44,7 @@ build/deploy:
 	# Must set the env-specific EFS_FILE_SYSTEM_ID in an .ebextensions config file
 	# to have our beanstalk-env instances mount this network file system
 	# (used for reading/writing trained models)
-	#
+	# ...
 	# sed -i option works differently on linux and mac
 	# so have to output to a temp file and then copy back
 	cd build/deploy/bundle/.ebextensions \
