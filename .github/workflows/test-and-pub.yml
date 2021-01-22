@@ -34,7 +34,8 @@ jobs:
           fi
       - id: is_deploy_disabled
         run: |
-          if [[ "${{secrets.DEPLOY_DISABLED}}" == "true" ]]; then
+          if [[ -z "${{secrets.AWS_ACCESS_KEY_ID}}" ]]; then
+              echo "deploy is disabled on this repo because secret AWS_ACCESS_KEY_ID is unset"
               echo ::set-output name=is_deploy_disabled::true
           fi
   deploy:
