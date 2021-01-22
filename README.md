@@ -1,6 +1,31 @@
-# org-opentutor
+# opentutor.site (beanstalk app)
 
-Demo deployment of opentutor, e.g. opentutor.org
+Use this repo to deploy the latest version (or any version) of opentutor to your own opentutor site as an [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) application.
+
+## Deploying your site
+
+The instructions below will guide you to set up an opentutor site, running on `AWS Elastic Beanstalk` for your own domain name.
+
+### Prerequisites
+
+You need an `AWS` account with your Elastic Beanstalk infrastructure already in place. You can use our [terraform template](https://github.com/opentutor/terraform-opentutor-aws-beanstalk) to build and maintain this infrastructure.
+
+### Creating the github (fork-LIKE) repo for your site
+
+The goal is to allow you to manage your deployment without having to edit any code or configuration, other than some environment vars/secrets for the [github actions](https://github.com/features/actions) in your own copy of this repo. So keep that in mind when reading the instructions below.
+
+#### Step 1. Clone this repo
+
+```
+git clone https://github.com/opentutor/beanstalk-deployment.git 
+```
+
+## FAQ
+
+- Why can't I just fork this repo for my site?
+
+
+
 
 ## Required software
 
