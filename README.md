@@ -14,6 +14,10 @@ You need an `AWS` account with your Elastic Beanstalk infrastructure already in 
 
 The goal is to allow you to manage your deployment without having to edit any code or configuration, other than some environment vars/secrets for the [github actions](https://github.com/features/actions) in your own copy of this repo. So keep that in mind when reading the instructions below.
 
+- create a repo for your site in github.com, e.g. `opentutor.yourdomain.org-beanstalk-app`
+
+- clone your repo locally
+
 #### Step 1. Clone this repo
 
 ```
