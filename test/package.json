@@ -1,0 +1,16 @@
+{
+  "name": "org-pal3-opentutor-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "npx cypress open",
+    "test:cypress": "npx cypress run --spec 'cypress/**/*.spec.js'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^5.0.0",
+    "cypress-fill-command": "0.1.0"
+  }
+}

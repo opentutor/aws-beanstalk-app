@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# But not these files...
+!test/cypress/*
+!*/*.ts
+!*/*.js
+!*/*.tsx
+!*/*.jsx
+!*/*.html

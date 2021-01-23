@@ -1,110 +1,96 @@
-# beanstalk-deployment
+# opentutor.site (beanstalk app)
 
-Demo deployment of opentutor, e.g. opentutor.info
+Use this repo to deploy the latest version (or any version) of opentutor to your own opentutor site as an [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) application.
 
-## Required software
+## Deploying your site
 
-- unix shell + make
-- docker-compose
-- make
-- git + git lfs
+The instructions below will guide you to set up an opentutor site, running on `AWS Elastic Beanstalk` for your own domain name.
 
-## Running the app locally
+### Prerequisites
 
-#### .env secrets
+You need an `AWS` account with your Elastic Beanstalk infrastructure already in place. You can use our [terraform template](https://github.com/opentutor/terraform-opentutor-aws-beanstalk) to build and maintain this infrastructure.
 
-Opentutor depends on some secret configuration to run (e.g. the `MONGO_URI` which includes password). In order to run the app locally, you will need a `.env` for the environment you're running. The default environment here is `opentutor-dev`, so the .env file goes at `env/opentutor-dev/.env`. Check with an admin to get the contents for that file.
+### Required Software
 
-#### git-lfs to pull model files
+- unix shell
+- git
+- git lfs
+- curl
 
-Larger model files like word2vec.bin are stored in git-lfs, so in order to run locally you need to pull lfs files explicitly. 
+### Creating the github (fork-LIKE) repo for your site
 
-First you need to install `git-lfs` once for the clone:
+The goal is to allow you to manage your deployment without having to edit any code or configuration, other than some environment vars/secrets for the [github actions](https://github.com/features/actions) in your own copy of this repo. So keep that in mind when reading the instructions below.
 
-`git lfs install`
+**Step 1. Create and clone a repo for your site**
 
-Then, pull
+Do this the normal way in your github.com account. If you like name your repo the same as the domain name of your opentutor site + a suffix, e.g. `opentutor.yourdomain.org-beanstalk-app`
 
-`git lfs pull`
+You probably want this repo to be private, and you can use whatever option to make sure your repo has its `main` branch with a first commit (e.g. choose the option to create a README when you create the repo). Whatever commits you put in this repo will just be overwritten with tagged versions the opentutor beanstalk-deployment repo.
 
-#### running the app in docker-compose via make
+**Step 2. Initialize your repo as a fork-like clone opentutor's [beanstalk-deployment](https://github.com/opentutor/beanstalk-deployment.git) repo**
 
-The app is set up to run locally in `docker-compose`, but it's easer to start it using make, e.g.
+In a unix terminal, cd to the root of your repo clone and then execute:
 
-```
-make run
-```
-
-## Training the classifier model
-
-In `Makefile`, ensure CLASSIFIER_DOCKER_IMAGE is up-to-date
-
-#### Syncing training data
-
-Downloads training config.yaml and training.csv into /data/lessonId
-
-```
-make sync-{lessonId}
+```bash
+curl -s -H "Accept:application/vnd.github.v3.raw" https://api.github.com/repos/opentutor/beanstalk-deployment/contents/bin/init.sh | sh
 ```
 
-#### Training model classifier
+This will change the `upstream` remote for your clone to the opentutor source repo, set up git lfs etc.
 
-Creates a model for the lesson under /models/lessonId
+The result will end up being a lot like a fork, but it can't be an actual fork or `github actions` will not run for you.
 
-To work, training data must have at least 2 GOOD and 2 BAD responses for each expectation
+### Configure your repo to deploy to your site using [github secrets](https://docs.github.com/en/actions/reference/encrypted-secrets)**
 
-```
-make train-{lessonId}
-```
+Before you can deploy a version of opentutor to your site, you need to configure your repo so github actions will deploy to the right account, instance, etc.
 
-#### Training default classifier
+The goal is to allow you to use a fork-like clone of this repo to manage your deployment--including switching opentutor release versions--without having to edit code/config or do any complicated git merging. To enabled this, all the details that specify your site and AWS account are stored as `github secrets`. We use `github secrets` for config whether it's really secret or not because secrets is the mechanism `github actions` provides for configuring enviroment variables that can be accessed in `github actions`.
 
-```
-make traindefault
-```
+You will need to configure all of the following secrets:
 
-## Cypress End-to-End Testing
+ - *AWS_ACCESS_KEY_ID*
+ - *AWS_SECRET_ACCESS_KEY*
+ - *AWS_REGION*
+ - *EBS_APP_NAME*
+ - *EBS_ENV_NAME_PROD*
+ - *EFS_FILE_SYSTEM_ID*
 
-#### To run Cypress tests:
+If you don't know what any or all of these values should be, whoever setup your Elastic Beanstalk infrastructure in AWS should be able to configure them in github secrets for you, and/or see the [terraform template](https://github.com/opentutor/terraform-opentutor-aws-beanstalk)
 
-```
-make test-run
-```
+### Deploying a version of opentutor to your site domain
 
-Then in a different terminal:
+Once your repo is configured per above, follow these steps to deploy a version.
 
-```
-cd test
-npm ci
-npm run cy:open
-```
+### Step 1. switch your clone to the desired version (or latest stable)
 
-#### To run Cypress tests inside of Docker:
+To switch your clone to the latest stable version of opentutor, open a terminal to the root of your repo and do
 
-```
-make test
-```
-or
-```
-cd test
-docker-compose -f ../docker-compose.yml -f docker-compose.yml up --exit-code-from cypress
+```bash
+sh ./bin/version_switch.sh
 ```
 
-#### To run Cypress tests inside of Docker with interactive GUI, you'll need to first set up X11 display:
+...if you want a specific released version pass that version tag to the above, e.g.
 
-- Install XQuartz with `brew cask install xquartz`
-- Restart machine
-- Open XQuartz with `open -a XQuartz`
-- In the XQuartz preferences, go to the “Security” tab and make sure you’ve got “Allow connections from network clients” ticked
+```bash
+sh ./bin/version_switch.sh 1.1.0
+```
 
-Then:
+### Step 2. push to main
+
+This needs to be a force push, e.g.
 
 ```
-make test-with-ui
+git push --force
 ```
-or
-```
-cd test
-xhost +
-docker-compose -f ../docker-compose.yml -f docker-compose.yml -f cypress-open.yml up --exit-code-from cypress
-```
+
+### Step 3. Create a release tag to trigger the deployment
+
+Github actions will deploy to your site when you [create a release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release) that matches the expected semver format, e.g. `1.0.0` or `1.2.1`. The deploy job will also run on tags that have alphanumeric suffixes like `1.3.1-rc1`. In practice, it's hard to think of a case where the release you create in your repo wouldn't have the same version number as the tag you're releasing.
+
+As soon as you create a release in the format described above, the deployment action should trigger in github actions.
+
+## FAQ
+
+### Why can't I just fork this repo for my site?
+
+Github actions don't run on forked repositories
+
