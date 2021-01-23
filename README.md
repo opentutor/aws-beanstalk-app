@@ -88,9 +88,9 @@ Github actions will deploy to your site when you [create a release](https://docs
 
 As soon as you create a release in the format described above, the deployment action should trigger in github actions.
 
-
 ## FAQ
 
 ### Why can't I just fork this repo for my site?
 
 Github actions don't run on forked repositories
+
