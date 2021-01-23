@@ -25,17 +25,36 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       is_release: ${{ steps.is_release.outputs.is_release }}
+      is_deploy_disabled: ${{ steps.is_deploy_disabled.outputs.is_deploy_disabled }}
     steps:
       - id: is_release
         run: |
           if [[ ${{ github.event.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.]*)?$ ]]; then
               echo ::set-output name=is_release::true
           fi
+      - id: is_deploy_disabled
+        run: |
+          if [[ -z "${{secrets.AWS_ACCESS_KEY_ID}}" ]]; then
+              echo "deploy is disabled on this repo because secret AWS_ACCESS_KEY_ID is unset"
+              echo ::set-output name=is_deploy_disabled::true
+          elif [[ -z "${{secrets.AWS_SECRET_ACCESS_KEY}}" ]]; then
+              echo "deploy is disabled on this repo because secret AWS_SECRET_ACCESS_KEY is unset"
+              echo ::set-output name=is_deploy_disabled::true
+          elif [[ -z "${{secrets.EBS_APP_NAME}}" ]]; then
+              echo "deploy is disabled on this repo because EBS_APP_NAME is unset in secrets"
+              echo ::set-output name=is_deploy_disabled::true
+          elif [[ -z "${{secrets.EBS_ENV_NAME_PROD}}" ]]; then
+              echo "deploy is disabled on this repo because EBS_ENV_NAME_PROD is unset in secrets"
+              echo ::set-output name=is_deploy_disabled::true
+          elif [[ -z "${{secrets.EFS_FILE_SYSTEM_ID}}" ]]; then
+              echo "deploy is disabled on this repo because EFS_FILE_SYSTEM_ID is unset in secrets"
+              echo ::set-output name=is_deploy_disabled::true
+          fi
   deploy:
     runs-on: ubuntu-latest
     needs:
       - publish-check
-    if: needs.publish-check.outputs.is_release
+    if: needs.publish-check.outputs.is_release && !needs.publish-check.outputs.is_deploy_disabled
     steps:
     - uses: actions/checkout@v1
       with:
