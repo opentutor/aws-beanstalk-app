@@ -34,7 +34,7 @@ services:
         target: /app/models_deployed
         read_only: true
   dialog:
-    image: uscictdocker/opentutor-dialog:1.1.2
+    image: uscictdocker/opentutor-dialog:1.2.0
     ports:
       - 3000:3000
     environment:
