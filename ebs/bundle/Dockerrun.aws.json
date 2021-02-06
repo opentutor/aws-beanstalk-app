@@ -106,7 +106,7 @@
     },
     {
       "name": "dialog",
-      "image": "uscictdocker/opentutor-dialog:1.2.0",
+      "image": "uscictdocker/opentutor-dialog:1.3.0-alpha.1",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
