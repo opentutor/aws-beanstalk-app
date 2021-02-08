@@ -4,7 +4,7 @@
 # from the authoritative upstream repo
 # OR to the latest stable release if no version specified
 
-LATEST_RELEASE_URL=https://github.com/opentutor/beanstalk-deployment/releases/latest
+LATEST_RELEASE_URL=https://github.com/opentutor/aws-beanstalk-app/releases/latest
 
 function get_latest_stable_release() {
     URL=$(curl -Ls -o /dev/null -w %{url_effective} $1)

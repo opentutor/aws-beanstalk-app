@@ -25,14 +25,14 @@ The goal is to allow you to manage your deployment without having to edit any co
 
 Do this the normal way in your github.com account. If you like name your repo the same as the domain name of your opentutor site + a suffix, e.g. `opentutor.yourdomain.org-beanstalk-app`
 
-You probably want this repo to be private, and you can use whatever option to make sure your repo has its `main` branch with a first commit (e.g. choose the option to create a README when you create the repo). Whatever commits you put in this repo will just be overwritten with tagged versions the opentutor beanstalk-deployment repo.
+You probably want this repo to be private, and you can use whatever option to make sure your repo has its `main` branch with a first commit (e.g. choose the option to create a README when you create the repo). Whatever commits you put in this repo will just be overwritten with tagged versions the opentutor aws-beanstalk-app repo.
 
-**Step 2. Initialize your repo as a fork-like clone opentutor's [beanstalk-deployment](https://github.com/opentutor/beanstalk-deployment.git) repo**
+**Step 2. Initialize your repo as a fork-like clone of opentutor's [aws-beanstalk-app](https://github.com/opentutor/aws-beanstalk-app.git) repo**
 
 In a unix terminal, cd to the root of your repo clone and then execute:
 
 ```bash
-curl -s -H "Accept:application/vnd.github.v3.raw" https://api.github.com/repos/opentutor/beanstalk-deployment/contents/bin/init.sh | sh
+curl -s -H "Accept:application/vnd.github.v3.raw" https://api.github.com/repos/opentutor/aws-beanstalk-app/contents/bin/init.sh | sh
 ```
 
 This will change the `upstream` remote for your clone to the opentutor source repo, set up git lfs etc.
