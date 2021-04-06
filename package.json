@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/ICTLearningSciences/org-pal3-opentutor#readme",
   "devDependencies": {
-    "license-check-and-add": "^3.0.4",
+    "license-check-and-add": "^4.0.2",
     "prettier": "^2.0.5"
   }
 }

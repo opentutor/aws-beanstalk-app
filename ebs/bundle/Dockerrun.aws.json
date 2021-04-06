@@ -106,7 +106,7 @@
     },
     {
       "name": "dialog",
-      "image": "uscictdocker/opentutor-dialog:2.0.0",
+      "image": "uscictdocker/opentutor-dialog:2.0.2",
       "essential": true,
       "memory": 512,
       "mountPoints": [
@@ -129,7 +129,7 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:2.1.0",
+      "image": "uscictdocker/opentutor-graphql:2.1.1",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
