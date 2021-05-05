@@ -53,7 +53,7 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:2.0.0",
+      "image": "uscictdocker/opentutor-admin:2.1.0-alpha.1",
       "essential": true,
       "memory": 512,
       "mountPoints": [
@@ -129,7 +129,7 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:2.1.1",
+      "image": "uscictdocker/opentutor-graphql:2.1.2-alpha.4",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
