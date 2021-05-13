@@ -72,8 +72,12 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.0.0",
+      "image": "uscictdocker/opentutor-classifier-api:2.1.1-alpha.3",
       "environment": [
+        {
+          "name": "CLASSIFIER_ARCH",
+          "value": "opentutor_classifier.lr"
+        },
         {
           "name": "STATUS_URL_FORCE_HTTPS",
           "value": "true"
@@ -206,9 +210,13 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.0.0",
+      "image": "uscictdocker/opentutor-classifier:2.1.1-alpha.3",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
+        {
+          "name": "CLASSIFIER_ARCH",
+          "value": "opentutor_classifier.lr"
+        },
         {
           "name": "GRAPHQL_ENDPOINT",
           "value": "http://graphql:3001/graphql"
