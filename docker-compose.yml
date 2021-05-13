@@ -8,7 +8,8 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:2.0.0
+    image: uscictdocker/opentutor-classifier-api:2.1.1-alpha.3
+    # image: opentutor-classifier-api:latest
     depends_on:
       - redis
     links:
@@ -16,11 +17,16 @@ services:
     ports:
       - 5000:5000
     environment:
+      - CLASSIFIER_ARCH=opentutor_classifier.lr
+      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
       - MODEL_ROOT
       - MODEL_DEPLOYED_ROOT
       - SHARED_ROOT
       - STATUS_URL_FORCE_HTTPS
     volumes:
+      - type: bind
+        source: ./build/run/.env
+        target: /app/.env
       - type: bind
         source: ./models
         target: /app/models
@@ -97,12 +103,14 @@ services:
     ports: 
       - "6379:6379"
   training:
-    image: uscictdocker/opentutor-classifier:2.0.0
+    image: uscictdocker/opentutor-classifier:2.1.1-alpha.3
+    # image: opentutor-classifier:latest
     depends_on:
       - graphql
       - redis
     entrypoint: /app/training_worker.sh
     environment:
+      - CLASSIFIER_ARCH=opentutor_classifier.lr
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
       - LOG_LEVEL_CLASSIFIER=DEBUG
       - MODEL_ROOT
@@ -112,6 +120,9 @@ services:
       - graphql
       - redis
     volumes:
+      - type: bind
+        source: ./build/run/.env
+        target: /app/.env
       - type: bind
         source: ./archive
         target: /app/archive
