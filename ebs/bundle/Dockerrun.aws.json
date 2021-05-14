@@ -53,7 +53,7 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:2.1.0-alpha.1",
+      "image": "uscictdocker/opentutor-admin:2.2.0-alpha.1",
       "essential": true,
       "memory": 512,
       "mountPoints": [
@@ -77,6 +77,10 @@
         {
           "name": "CLASSIFIER_ARCH",
           "value": "opentutor_classifier.lr"
+        },
+        {
+          "name": "GRAPHQL_ENDPOINT",
+          "value": "http://graphql:3001/graphql"
         },
         {
           "name": "STATUS_URL_FORCE_HTTPS",
