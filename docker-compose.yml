@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   admin:
-    image: uscictdocker/opentutor-admin:2.1.0-alpha.1
+    image: uscictdocker/opentutor-admin:2.2.0-alpha.1
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
@@ -9,7 +9,6 @@ services:
       - graphql
   classifier:
     image: uscictdocker/opentutor-classifier-api:2.1.1-alpha.3
-    # image: opentutor-classifier-api:latest
     depends_on:
       - redis
     links:
@@ -104,7 +103,6 @@ services:
       - "6379:6379"
   training:
     image: uscictdocker/opentutor-classifier:2.1.1-alpha.3
-    # image: opentutor-classifier:latest
     depends_on:
       - graphql
       - redis
