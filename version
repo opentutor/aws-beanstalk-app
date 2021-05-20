@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Updates the repo to the a tagged/released version 
+# from the authoritative upstream repo
+# OR to the latest stable release if no version specified
+
+UPSTREAM=https://github.com/opentutor/aws-beanstalk-app
+LATEST_RELEASE_URL="${UPSTREAM}/releases/latest"
+
+function get_latest_stable_release() {
+    URL=$(curl -Ls -o /dev/null -w %{url_effective} $1)
+    VERSION=$(basename ${URL})
+    if [[ -z $VERSION ]]; then
+        exit 1;
+    fi
+    echo $VERSION
+    exit 0;
+}
+
+function usage() {
+    echo "usage: version publish|switch [<tag>|--latest]"
+}
+
+cmd=$1
+case $cmd in
+    publish|switch) ;;
+    *) 
+        echo "unknown command '$cmd'"
+        usage
+        exit 1
+    ;;
+esac
+
+tag=$2
+if [[ -z "$tag" ]]; then
+    echo "you must pass a valid tag or '--latest'"
+    usage
+    exit 1
+fi
+
+if [[ "$tag" == "--latest" ]]; then
+    tag="$(get_latest_stable_release ${LATEST_RELEASE_URL})"
+    echo "using latest stable release version (${tag})"
+fi
+
+git remote show upstream > /dev/null 2>&1 && echo "" || git remote add upstream "${UPSTREAM}.git"
+git lfs install
+git fetch upstream --tags --force
+git lfs fetch upstream
+
+if [[ "$(git tag -l "$tag")" == "" ]]; then
+    echo "tag ${tag} not found. use 'git tag' to check available tags"
+    echo ""
+    usage
+    exit -1
+fi
+
+if [[ "$cmd" == "publish" ]]; then
+    git push origin refs/tags/${tag}
+elif [[ "$cmd" == "switch" ]]; then
+    git reset --hard ${tag}
+fi
