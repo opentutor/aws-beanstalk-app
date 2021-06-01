@@ -8,7 +8,7 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:2.3.1-alpha.5
+    image: uscictdocker/opentutor-classifier-api:2.3.1
     depends_on:
       - redis
     links:
@@ -102,7 +102,7 @@ services:
     ports:
       - '6379:6379'
   training:
-    image: uscictdocker/opentutor-classifier:2.3.1-alpha.5
+    image: uscictdocker/opentutor-classifier:2.3.1
     depends_on:
       - graphql
       - redis
