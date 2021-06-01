@@ -53,9 +53,9 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:2.0.0",
+      "image": "uscictdocker/opentutor-admin:2.3.0",
       "essential": true,
-      "memory": 512,
+      "memory": 128,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-admin",
@@ -72,8 +72,16 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.0.0",
+      "image": "uscictdocker/opentutor-classifier-api:2.3.1",
       "environment": [
+        {
+          "name": "CLASSIFIER_ARCH",
+          "value": "opentutor_classifier.lr"
+        },
+        {
+          "name": "GRAPHQL_ENDPOINT",
+          "value": "http://graphql:3001/graphql"
+        },
         {
           "name": "STATUS_URL_FORCE_HTTPS",
           "value": "true"
@@ -106,7 +114,7 @@
     },
     {
       "name": "dialog",
-      "image": "uscictdocker/opentutor-dialog:2.0.2",
+      "image": "uscictdocker/opentutor-dialog:2.3.0",
       "essential": true,
       "memory": 512,
       "mountPoints": [
@@ -129,7 +137,7 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:2.1.1",
+      "image": "uscictdocker/opentutor-graphql:2.3.0",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
@@ -141,9 +149,9 @@
     },
     {
       "name": "home",
-      "image": "uscictdocker/opentutor-home:2.0.0",
+      "image": "uscictdocker/opentutor-home:2.3.0",
       "essential": true,
-      "memory": 512,
+      "memory": 128,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-home",
@@ -206,9 +214,13 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.0.0",
+      "image": "uscictdocker/opentutor-classifier:2.3.1",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
+        {
+          "name": "CLASSIFIER_ARCH",
+          "value": "opentutor_classifier.lr"
+        },
         {
           "name": "GRAPHQL_ENDPOINT",
           "value": "http://graphql:3001/graphql"
@@ -246,7 +258,7 @@
       "name": "tutor",
       "image": "uscictdocker/opentutor-web-client:2.3.0",
       "essential": true,
-      "memory": 512,
+      "memory": 128,
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-tutor",

@@ -1,14 +1,14 @@
 version: '3.2'
 services:
   admin:
-    image: uscictdocker/opentutor-admin:2.0.0
+    image: uscictdocker/opentutor-admin:2.3.0
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:2.0.0
+    image: uscictdocker/opentutor-classifier-api:2.3.1
     depends_on:
       - redis
     links:
@@ -16,11 +16,16 @@ services:
     ports:
       - 5000:5000
     environment:
+      - CLASSIFIER_ARCH=opentutor_classifier.lr
+      - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
       - MODEL_ROOT
       - MODEL_DEPLOYED_ROOT
       - SHARED_ROOT
       - STATUS_URL_FORCE_HTTPS
     volumes:
+      - type: bind
+        source: ./build/run/.env
+        target: /app/.env
       - type: bind
         source: ./models
         target: /app/models
@@ -34,7 +39,7 @@ services:
         target: /app/models_deployed
         read_only: true
   dialog:
-    image: uscictdocker/opentutor-dialog:2.0.2
+    image: uscictdocker/opentutor-dialog:2.3.0
     ports:
       - 3000:3000
     environment:
@@ -53,7 +58,7 @@ services:
       - classifier
       - graphql
   graphql:
-    image: uscictdocker/opentutor-graphql:2.1.1
+    image: uscictdocker/opentutor-graphql:2.3.0
     ports:
       - 3001:3001
     environment:
@@ -64,7 +69,7 @@ services:
         source: ./build/run/.env
         target: /app/.env
   home:
-    image: uscictdocker/opentutor-home:2.0.0
+    image: uscictdocker/opentutor-home:2.3.0
     environment:
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
     depends_on:
@@ -93,16 +98,17 @@ services:
         source: ./nginx/conf.d
         target: /etc/nginx/conf.d
   redis:
-    image: "redis:6-alpine"
-    ports: 
-      - "6379:6379"
+    image: 'redis:6-alpine'
+    ports:
+      - '6379:6379'
   training:
-    image: uscictdocker/opentutor-classifier:2.0.0
+    image: uscictdocker/opentutor-classifier:2.3.1
     depends_on:
       - graphql
       - redis
     entrypoint: /app/training_worker.sh
     environment:
+      - CLASSIFIER_ARCH=opentutor_classifier.lr
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
       - LOG_LEVEL_CLASSIFIER=DEBUG
       - MODEL_ROOT
@@ -112,6 +118,9 @@ services:
       - graphql
       - redis
     volumes:
+      - type: bind
+        source: ./build/run/.env
+        target: /app/.env
       - type: bind
         source: ./archive
         target: /app/archive
