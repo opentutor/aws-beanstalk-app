@@ -88,7 +88,7 @@
         }
       ],
       "essential": true,
-      "links": ["admin", "dialog", "graphql", "home", "redis", "tutor"],
+      "links": ["graphql", "redis"],
       "memory": 6144,
       "mountPoints": [
         {
