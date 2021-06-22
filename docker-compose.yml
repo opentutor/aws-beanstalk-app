@@ -103,20 +103,20 @@ services:
     ports:
       - '6379:6379'
   status:
-    image: uscictdocker/opentutor-status:2.4.0-alpha.1
+    image: uscictdocker/opentutor-status:2.4.0-alpha.2
     depends_on:
       - admin
       - classifier
       - dialog
       - graphql
+      - home
       - tutor
-    environment:
-      - HEALTHCHECK_GRAPHQL=http://graphql:3001/graphql
     links:
       - admin
       - classifier
       - dialog
       - graphql
+      - home
       - tutor
   training:
     image: uscictdocker/opentutor-classifier:2.4.0-alpha.8
