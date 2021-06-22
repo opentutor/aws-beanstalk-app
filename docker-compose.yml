@@ -85,11 +85,12 @@ services:
     ports:
       - 80:80
     depends_on:
+      - admin
       - classifier
       - dialog
       - graphql
-      - admin
       - home
+      - status
     volumes:
       - type: bind
         source: ./nginx/nginx.conf
@@ -101,6 +102,22 @@ services:
     image: 'redis:6-alpine'
     ports:
       - '6379:6379'
+  status:
+    image: uscictdocker/opentutor-status:2.4.0-alpha.1
+    depends_on:
+      - admin
+      - classifier
+      - dialog
+      - graphql
+      - tutor
+    environment:
+      - HEALTHCHECK_GRAPHQL=http://graphql:3001/graphql
+    links:
+      - admin
+      - classifier
+      - dialog
+      - graphql
+      - tutor
   training:
     image: uscictdocker/opentutor-classifier:2.4.0-alpha.8
     depends_on:

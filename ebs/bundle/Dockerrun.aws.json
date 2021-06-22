@@ -177,7 +177,7 @@
           "containerPort": 80
         }
       ],
-      "links": ["admin", "classifier", "dialog", "graphql", "home", "tutor"],
+      "links": ["admin", "classifier", "dialog", "graphql", "home", "status", "tutor"],
       "mountPoints": [
         {
           "sourceVolume": "nginx-volume-www",
@@ -251,6 +251,25 @@
           "sourceVolume": "classifier-models-deployed",
           "containerPath": "/app/models_deployed",
           "readOnly": true
+        }
+      ]
+    },
+    {
+      "name": "status",
+      "image": "uscictdocker/opentutor-status:2.4.0-alpha.1",
+      "environment": [
+        {
+          "name": "HEALTHCHECK_GRAPHQL",
+          "value": "http://graphql:3001/graphql"
+        }
+      ],
+      "essential": true,
+      "links": ["admin", "classifier", "dialog", "graphql", "tutor"],
+      "memory": 256,
+      "mountPoints": [
+        {
+          "sourceVolume": "awseb-logs-status",
+          "containerPath": "/var/log/node"
         }
       ]
     },
