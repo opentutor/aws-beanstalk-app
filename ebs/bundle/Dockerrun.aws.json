@@ -53,7 +53,7 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:2.4.0-alpha.8",
+      "image": "uscictdocker/opentutor-admin:2.4.0-alpha.9",
       "essential": true,
       "memory": 128,
       "mountPoints": [
