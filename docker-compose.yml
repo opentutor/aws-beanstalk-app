@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   admin:
-    image: uscictdocker/opentutor-admin:2.4.0-alpha.7
+    image: uscictdocker/opentutor-admin:2.4.0-alpha.8
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
@@ -58,7 +58,7 @@ services:
       - classifier
       - graphql
   graphql:
-    image: uscictdocker/opentutor-graphql:2.4.0-alpha.4
+    image: uscictdocker/opentutor-graphql:2.4.0-alpha.5
     ports:
       - 3001:3001
     environment:
