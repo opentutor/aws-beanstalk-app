@@ -58,7 +58,7 @@ services:
       - classifier
       - graphql
   graphql:
-    image: uscictdocker/opentutor-graphql:2.4.0
+    image: uscictdocker/opentutor-graphql:2.5.0-alpha.1
     ports:
       - 3001:3001
     environment:

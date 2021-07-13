@@ -137,7 +137,7 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:2.4.0",
+      "image": "uscictdocker/opentutor-graphql:2.5.0-alpha.1",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
