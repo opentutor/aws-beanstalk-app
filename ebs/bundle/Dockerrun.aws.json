@@ -72,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.4.0",
+      "image": "uscictdocker/opentutor-classifier-api:2.5.0-poetry.2",
       "environment": [
         {
           "name": "CLASSIFIER_ARCH",
@@ -227,7 +227,7 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.4.0",
+      "image": "uscictdocker/opentutor-classifier:2.5.0-poetry.2",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {

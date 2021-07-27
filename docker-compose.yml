@@ -8,7 +8,7 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:2.4.0
+    image: uscictdocker/opentutor-classifier-api:2.5.0-poetry.2
     depends_on:
       - redis
     links:
@@ -119,7 +119,7 @@ services:
       - home
       - tutor
   training:
-    image: uscictdocker/opentutor-classifier:2.4.0
+    image: uscictdocker/opentutor-classifier:2.5.0-poetry.2
     depends_on:
       - graphql
       - redis
