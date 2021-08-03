@@ -53,7 +53,7 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "uscictdocker/opentutor-admin:2.6.0-alpha.1",
+      "image": "uscictdocker/opentutor-admin:2.6.0-alpha.2",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -72,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.6.0-alpha.4",
+      "image": "uscictdocker/opentutor-classifier-api:2.6.0-alpha.6",
       "environment": [
         {
           "name": "CLASSIFIER_ARCH",
@@ -114,7 +114,7 @@
     },
     {
       "name": "dialog",
-      "image": "uscictdocker/opentutor-dialog:2.6.0-alpha.1",
+      "image": "uscictdocker/opentutor-dialog:2.6.0-alpha.2",
       "essential": true,
       "memory": 512,
       "mountPoints": [
@@ -227,7 +227,7 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.6.0-alpha.4",
+      "image": "uscictdocker/opentutor-classifier:2.6.0-alpha.6",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {
