@@ -1,14 +1,14 @@
 version: '3.2'
 services:
   admin:
-    image: uscictdocker/opentutor-admin:2.6.0-alpha.2
+    image: uscictdocker/opentutor-admin:2.5.0
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
     depends_on:
       - graphql
   classifier:
-    image: uscictdocker/opentutor-classifier-api:2.6.0-alpha.6
+    image: uscictdocker/opentutor-classifier-api:2.5.0
     depends_on:
       - redis
     links:
@@ -39,7 +39,7 @@ services:
         target: /app/models_deployed
         read_only: true
   dialog:
-    image: uscictdocker/opentutor-dialog:2.6.0-alpha.2
+    image: uscictdocker/opentutor-dialog:2.5.0
     ports:
       - 3000:3000
     environment:
@@ -58,7 +58,7 @@ services:
       - classifier
       - graphql
   graphql:
-    image: uscictdocker/opentutor-graphql:2.6.0-alpha.1
+    image: uscictdocker/opentutor-graphql:2.5.0
     ports:
       - 3001:3001
     environment:
@@ -119,7 +119,7 @@ services:
       - home
       - tutor
   training:
-    image: uscictdocker/opentutor-classifier:2.6.0-alpha.6
+    image: uscictdocker/opentutor-classifier:2.5.0
     depends_on:
       - graphql
       - redis
