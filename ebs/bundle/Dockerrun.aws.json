@@ -149,7 +149,7 @@
     },
     {
       "name": "home",
-      "image": "uscictdocker/opentutor-home:2.4.0",
+      "image": "uscictdocker/opentutor-home:2.5.0",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -214,7 +214,7 @@
     },
     {
       "name": "status",
-      "image": "uscictdocker/opentutor-status:2.4.0-alpha.2",
+      "image": "uscictdocker/opentutor-status:2.5.0",
       "essential": true,
       "links": ["admin", "classifier", "dialog", "graphql", "home", "tutor"],
       "memory": 256,
@@ -269,7 +269,7 @@
     },
     {
       "name": "tutor",
-      "image": "uscictdocker/opentutor-web-client:2.3.0",
+      "image": "uscictdocker/opentutor-web-client:2.5.0",
       "essential": true,
       "memory": 128,
       "mountPoints": [

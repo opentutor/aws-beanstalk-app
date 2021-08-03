@@ -69,7 +69,7 @@ services:
         source: ./build/run/.env
         target: /app/.env
   home:
-    image: uscictdocker/opentutor-home:2.4.0
+    image: uscictdocker/opentutor-home:2.5.0
     environment:
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
     depends_on:
@@ -103,7 +103,7 @@ services:
     ports:
       - '6379:6379'
   status:
-    image: uscictdocker/opentutor-status:2.4.0-alpha.2
+    image: uscictdocker/opentutor-status:2.5.0
     depends_on:
       - admin
       - classifier
@@ -153,4 +153,4 @@ services:
         target: /app/shared
         read_only: true
   tutor:
-    image: uscictdocker/opentutor-web-client:2.3.0
+    image: uscictdocker/opentutor-web-client:2.5.0
