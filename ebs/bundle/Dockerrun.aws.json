@@ -72,12 +72,8 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.5.0",
+      "image": "uscictdocker/opentutor-classifier-api:2.6.0-alpha.12",
       "environment": [
-        {
-          "name": "CLASSIFIER_ARCH",
-          "value": "opentutor_classifier.lr"
-        },
         {
           "name": "GRAPHQL_ENDPOINT",
           "value": "http://graphql:3001/graphql"
@@ -137,7 +133,7 @@
     },
     {
       "name": "graphql",
-      "image": "uscictdocker/opentutor-graphql:2.5.0",
+      "image": "uscictdocker/opentutor-graphql:2.6.0-alpha.2",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
@@ -227,13 +223,9 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.5.0",
+      "image": "uscictdocker/opentutor-classifier:2.6.0-alpha.12",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
-        {
-          "name": "CLASSIFIER_ARCH",
-          "value": "opentutor_classifier.lr"
-        },
         {
           "name": "GRAPHQL_ENDPOINT",
           "value": "http://graphql:3001/graphql"
