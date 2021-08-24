@@ -54,7 +54,9 @@ build/deploy:
 	mkdir -p build/deploy/bundle/classifier
 	# for now at least, packaging up our default model
 	# and word2vec.bin directly into the deploy.zip for beanstalk
+	mkdir -p ./models_deployed
 	cp -r ./models_deployed build/deploy/bundle/classifier/models_deployed
+	mkdir -p ./shared
 	cp -r ./shared build/deploy/bundle/classifier/shared
 
 deploy.zip:

@@ -72,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "uscictdocker/opentutor-classifier-api:2.6.0-alpha.12",
+      "image": "uscictdocker/opentutor-classifier-api:2.6.0-alpha.13",
       "environment": [
         {
           "name": "GRAPHQL_ENDPOINT",
@@ -223,7 +223,7 @@
     },
     {
       "name": "training",
-      "image": "uscictdocker/opentutor-classifier:2.6.0-alpha.12",
+      "image": "uscictdocker/opentutor-classifier:2.6.0-alpha.13",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {
