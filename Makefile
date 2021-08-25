@@ -69,8 +69,11 @@ archive:
 models:
 	mkdir -p models
 
+models_deployed:
+	mkdir -p models_deployed
+
 .PHONY: run
-run: clean build/run/.env archive models
+run: clean build/run/.env archive models models_deployed
 	NODE_ENV=$(ENV) \
 	ENV=$(ENV) \
 	LOG_LEVEL_DIALOG=$(LOG_LEVEL_DIALOG) \
