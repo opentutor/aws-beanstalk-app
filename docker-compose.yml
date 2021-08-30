@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   admin:
-    image: opentutor/opentutor-admin:2.6.0-alpha.3
+    image: opentutor/opentutor-admin:2.6.0-alpha.5
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
@@ -38,7 +38,7 @@ services:
         target: /app/models_deployed
         read_only: true
   dialog:
-    image: uscictdocker/opentutor-dialog:2.5.0
+    image: opentutor/opentutor-dialog:2.6.0-alpha.5
     ports:
       - 3000:3000
     environment:
@@ -57,7 +57,7 @@ services:
       - classifier
       - graphql
   graphql:
-    image: opentutor/opentutor-graphql:2.6.0-alpha.3
+    image: opentutor/opentutor-graphql:2.6.0-alpha.4
     ports:
       - 3001:3001
     environment:
@@ -151,4 +151,4 @@ services:
         target: /app/shared
         read_only: true
   tutor:
-    image: opentutor/opentutor-web-client:2.6.0-alpha.1
+    image: opentutor/opentutor-web-client:2.6.0-alpha.2
