@@ -261,7 +261,7 @@
     },
     {
       "name": "tutor",
-      "image": "opentutor/opentutor-web-client:2.6.0-alpha.2",
+      "image": "opentutor/opentutor-web-client:2.6.0-alpha.3",
       "essential": true,
       "memory": 128,
       "mountPoints": [
