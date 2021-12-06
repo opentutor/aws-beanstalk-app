@@ -54,7 +54,9 @@ build/deploy:
 	mkdir -p build/deploy/bundle/classifier
 	# for now at least, packaging up our default model
 	# and word2vec.bin directly into the deploy.zip for beanstalk
+	mkdir -p ./models_deployed
 	cp -r ./models_deployed build/deploy/bundle/classifier/models_deployed
+	mkdir -p ./shared
 	cp -r ./shared build/deploy/bundle/classifier/shared
 
 deploy.zip:
@@ -67,8 +69,11 @@ archive:
 models:
 	mkdir -p models
 
+models_deployed:
+	mkdir -p models_deployed
+
 .PHONY: run
-run: clean build/run/.env archive models
+run: clean build/run/.env archive models models_deployed
 	NODE_ENV=$(ENV) \
 	ENV=$(ENV) \
 	LOG_LEVEL_DIALOG=$(LOG_LEVEL_DIALOG) \
