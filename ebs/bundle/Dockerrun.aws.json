@@ -110,7 +110,7 @@
     },
     {
       "name": "dialog",
-      "image": "opentutor/opentutor-dialog:2.6.0-alpha.5",
+      "image": "opentutor/opentutor-dialog:2.6.1",
       "essential": true,
       "memory": 512,
       "mountPoints": [
