@@ -53,7 +53,7 @@
   "containerDefinitions": [
     {
       "name": "admin",
-      "image": "opentutor/opentutor-admin:2.6.0-alpha.5",
+      "image": "opentutor/opentutor-admin:2.6.0-alpha.6",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -261,7 +261,7 @@
     },
     {
       "name": "tutor",
-      "image": "opentutor/opentutor-web-client:2.6.0-alpha.3",
+      "image": "opentutor/opentutor-web-client:2.6.0-alpha.4",
       "essential": true,
       "memory": 128,
       "mountPoints": [
