@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   admin:
-    image: opentutor/opentutor-admin:2.6.4-alpha.1
+    image: opentutor/opentutor-admin:2.6.4-alpha.2
     environment:
       - NODE_ENV
       - GRAPHQL_ENDPOINT=http://graphql:3001/graphql
