@@ -72,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "opentutor/opentutor-classifier-api:2.6.0-alpha.14",
+      "image": "opentutor/opentutor-classifier-api:2.7.1-alpha.1",
       "environment": [
         {
           "name": "GRAPHQL_ENDPOINT",
@@ -133,7 +133,7 @@
     },
     {
       "name": "graphql",
-      "image": "opentutor/opentutor-graphql:2.6.0-alpha.4",
+      "image": "opentutor/opentutor-graphql:2.6.0-alpha.5",
       "essential": true,
       "memory": 1024,
       "mountPoints": [
@@ -223,7 +223,7 @@
     },
     {
       "name": "training",
-      "image": "opentutor/opentutor-classifier:2.6.0-alpha.14",
+      "image": "opentutor/opentutor-classifier:2.7.1-alpha.1",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {
