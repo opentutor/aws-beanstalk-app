@@ -8,7 +8,7 @@ services:
     depends_on:
       - graphql
   classifier:
-    image: opentutor/opentutor-classifier-api:2.7.1-alpha.1
+    image: opentutor/opentutor-classifier-api:2.7.1
     depends_on:
       - redis
     links:
@@ -118,7 +118,7 @@ services:
       - home
       - tutor
   training:
-    image: opentutor/opentutor-classifier:2.7.1-alpha.1
+    image: opentutor/opentutor-classifier:2.7.1
     depends_on:
       - graphql
       - redis
