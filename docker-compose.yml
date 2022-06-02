@@ -151,4 +151,4 @@ services:
         target: /app/shared
         read_only: true
   tutor:
-    image: opentutor/opentutor-web-client:2.6.4-alpha.3
+    image: opentutor/opentutor-web-client:2.6.4-alpha.4
