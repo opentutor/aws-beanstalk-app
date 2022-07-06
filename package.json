@@ -10,6 +10,7 @@
     "cypress:test": "cd test && npm run test:cypress",
     "cypress:open": "cd test && npm run cy:open",
     "license:fix": "license-check-and-add remove -f license-config.json && license-check-and-add add -f license-config.json",
+    "license:deploy": "license-check-and-add remove -f license-config.json && license-check-and-add add -f $LICENSE_CONFIG",
     "test:license": "license-check-and-add check -f license-config.json",
     "test:format": "prettier --check '**/*.{js,jsx,json,ts,tsx}'"
   },
