@@ -2,6 +2,7 @@ ENV?=test
 EFS_FILE_SYSTEM_ID?=
 NODE_ENV?=$(ENV)
 LOG_LEVEL_DIALOG?=info
+LICENSE_CONFIG?="license-config.json"
 
 DOTENV=env/$(ENV)/.env
 $(DOTENV):
@@ -98,6 +99,11 @@ license: LICENSE LICENSE_HEADER node_modules
 .PHONY: test-license
 test-license: LICENSE LICENSE_HEADER node_modules
 	npm run test:license
+	
+.PHONY: license-deploy
+license-deploy: node_modules LICENSE LICENSE_HEADER
+	LICENSE_CONFIG=${LICENSE_CONFIG} npm run license:deploy
+	
 
 .PHONY: format
 format: node_modules
