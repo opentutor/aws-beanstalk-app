@@ -72,7 +72,7 @@
     },
     {
       "name": "classifier",
-      "image": "opentutor/opentutor-classifier-api:2.7.1",
+      "image": "opentutor/opentutor-classifier-api:2.7.2",
       "environment": [
         {
           "name": "GRAPHQL_ENDPOINT",
@@ -223,7 +223,7 @@
     },
     {
       "name": "training",
-      "image": "opentutor/opentutor-classifier:2.7.1",
+      "image": "opentutor/opentutor-classifier:2.7.2",
       "entryPoint": ["/app/training_worker.sh"],
       "environment": [
         {
